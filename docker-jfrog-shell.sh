@@ -1,10 +1,12 @@
 #! /bin/bash
 source .env
 set -x
-tmux rename-window $0
+
+_tmux rename-window pg-run
 docker run \
     --name ${jf_container} \
     --network "${docker_network}" \
+    --mount type=bind,source="$(pwd)"/artifactory_bootstrap,target=/artifactory_bootstrap \
     --rm \
     -it \
     --entrypoint /bin/bash \
