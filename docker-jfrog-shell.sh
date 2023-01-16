@@ -2,12 +2,12 @@
 source .env
 set -x
 
-_tmux rename-window pg-run
+if [ -n ${TMUX} ]; then
+  tmux rename-window jfrog-shell
+fi
 docker run \
-    --name ${jf_container} \
-    --network "${docker_network}" \
-    --mount type=bind,source="$(pwd)"/artifactory_bootstrap,target=/artifactory_bootstrap \
-    --rm \
-    -it \
-    --entrypoint /bin/bash \
-    releases-docker.jfrog.io/jfrog/artifactory-oss:latest
+      --network "${docker_network}" \
+    	--rm \
+    	-it \
+      --entrypoint /bin/bash \
+    	mceligot/jfrog  | tee $0.log

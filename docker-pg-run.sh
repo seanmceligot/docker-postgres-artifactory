@@ -2,7 +2,9 @@
 source .env
 set -x
 
-tmux rename-window $0
+if [ -n "${TMUX}" ]; then
+tmux rename-window postgres
+fi
 docker run --rm  \
     --name "${pg_container}"  \
     --network "${docker_network}" \
@@ -12,4 +14,4 @@ docker run --rm  \
     -e POSTGRES_DB=${database} \
     -e PGDATA=/var/lib/postgresql/data/pgdata \
     -v ${pg_volume}:/var/lib/postgresql/data \
-    ${pg_image}
+    ${pg_image} postgres -c log_statement=all
